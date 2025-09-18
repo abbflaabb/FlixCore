@@ -1,28 +1,29 @@
 # FlixCore Plugin
 
-**Plugin by:** Abbas  
-**Support:** Discord `alis283sf`  
+**Plugin by:** Abbas
+**Support:** Discord `alis283sf`
 **Version:** [![](https://jitpack.io/v/abbflaabb/FlixCore.svg)](https://jitpack.io/#abbflaabb/FlixCore)
-
 
 ---
 
 ## 📌 Features
 
 ### 🔹 Commands
-- `/gmc` – Switch to Creative Mode
-- `/gms` – Switch to Survival Mode
-- `/heal` – Heal yourself
-- `/backbed` – Teleport back to your bed
-- `/help` – Show help menu
-- `/food` – Restore hunger
-- `/farte` – Fun command 🎉
-- `/Fly` - Fly Command
-- `/Menu` - Show game Selector
+
+* `/gmc` – Switch to Creative Mode
+* `/gms` – Switch to Survival Mode
+* `/heal` – Heal yourself
+* `/backbed` – Teleport back to your bed
+* `/help` – Show help menu
+* `/food` – Restore hunger
+* `/farte` – Fun command 🎉
+* `/fly` – Fly command
+* `/menu` – Show game selector
 
 ---
 
 ### 🔹 Events
+
 1. **PlayerJoinEvent** → Custom join message & show IP
 2. **KickEvent** → Custom kick message
 3. **LeaveBedEvent** → Custom message + deal 1.5 hearts damage
@@ -38,36 +39,67 @@
 ---
 
 ### 🔹 Chat Format
-Custom player chat format:  
+
+Custom player chat format:
+
+```
 &7[&a{Player}&7]: &f{Message}
+```
 
 ---
 
 ### 🔹 CommandPreprocessEvent
-Block usage of:
-- `/op`
-- `/?`
-- `/pl`
-- `/plugins`
-- `/bukkit:plugins`
-- etc.
+
+Blocks usage of:
+
+* `/op`
+* `/?`
+* `/pl`
+* `/plugins`
+* `/bukkit:plugins`
+* etc.
 
 ---
 
 ### 🔹 Permissions
-- `myplugin.bypass` → Bypass restrictions
-- `Plugin.Admin` → Admin commands
+
+* `myplugin.bypass` → Bypass restrictions
+* `Plugin.Admin` → Admin commands
+* `  Fly.Commands` → for Fly
+* ` Fly.command.others` for fly others
 
 ---
 
 ### ⏳ Cooldown
-- Countdown support for **all commands**
+
+* Countdown support for **all commands**
+
+---
+
+## 📦 Maven Dependency
+
+```xml
+<dependency>
+    <groupId>com.github.abbflaabb</groupId>
+    <artifactId>FlixCore</artifactId>
+    <version>1.2</version>
+</dependency>
+
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
 
 ---
 
 ## ⚡ Notes
-- This plugin is still in **Beta (1.0b)**
-- Future updates will include:
-    - More customization
-    - Better performance optimizations
-    - Extra admin & fun features  
+
+* This plugin is still in **Release (1.2)**
+* Future updates will include:
+
+    * More customization
+    * Better performance optimizations
+    * Extra admin & fun features
