@@ -2,7 +2,8 @@
 
 **Plugin by:** Abbas  
 **Support:** Discord `alis283sf`  
-**Version:** Beta 1.0b
+**Version:** [![](https://jitpack.io/v/abbflaabb/FlixCore.svg)](https://jitpack.io/#abbflaabb/FlixCore)
+
 
 ---
 
