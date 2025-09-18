@@ -61,5 +61,4 @@ public final class MyPlugin extends JavaPlugin {
         File messagesFile = new File(getDataFolder(), "Messages.yml");
         messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
     }
-
 }
