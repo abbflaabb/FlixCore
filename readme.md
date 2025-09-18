@@ -1,4 +1,4 @@
-# AbbasCore Plugin
+# FlixCore Plugin
 
 **Plugin by:** Abbas  
 **Support:** Discord `alis283sf`  
