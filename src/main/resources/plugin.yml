@@ -44,10 +44,10 @@ permissions:
   Plugin.Admin:
     description: Allows access to admin commands
     default: op
-  Player.Commands:
+  Fly.Command:
     description: PlayerMainCommands
     default: op
-  player.commands.others:
+  Fly.command.others:
     description: for Flay Others Players
     default: op
 
