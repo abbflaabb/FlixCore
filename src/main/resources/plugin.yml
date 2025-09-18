@@ -1,0 +1,49 @@
+name: MyPlugin
+version: '${project.version}'
+main: com.abbas.myplugin.MyPlugin
+api-version: '1.13'
+
+commands:
+  gmc:
+    description: Change game mode to creative
+    usage: /<command>
+  gms:
+    description: Change game mode to survival
+    usage: /<command>
+  heal:
+    description: Heal yourself or another player
+  Backbed:
+    description: Go back to your last location
+    usage: /<command>
+  help:
+    description: Display help information
+    usage: /<command>
+  food:
+    description: Make your Food Full
+    usage: /<command>
+  Farte:
+  Support:
+    description: for SupportLink
+    usage: /<command>
+  Menu:
+    usage: /<command>
+
+  Fly:
+    description: Toggle Fly Mode
+    usage: /<command>
+
+
+permissions:
+  myplugin.bypass:
+    description: Allows access to Events
+    default: op
+  Plugin.Admin:
+    description: Allows access to admin commands
+    default: op
+  Player.Commands:
+    description: PlayerMainCommands
+    default: op
+  player.commands.others:
+    description: for Flay Others Players
+    default: op
+

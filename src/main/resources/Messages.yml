@@ -1,0 +1,29 @@
+Block-Break-Message: '&c[BlockBreak] {Player} &dYou can''t break blocks here! {Block}'
+Chat-Format: '&7[&a{Player}&7]: &f{Message}'
+Damage-Event: true
+Drop-Item: '&c[Drop-Items] {Player} &dYou can''t Drop Items {Item}'
+Bed-Enter: '&c[Bed-Enter] {Player} &dYou Can''t Enter To Bed this Feature Has Been Disabled From Owner Server Please Dont Try Again'
+Error-Commands: '&c[Error] You Not Allowed Use this CMD'
+Help-Command:
+  - "&7----- Help Commands -----"
+  - "&6/gmc &7- Change game mode to creative"
+  - "&6/gms &7- Change game mode to survival"
+  - "&6/heal &7- Heal yourself or another player"
+  - "&6/backbed &7- Go back to your last location"
+  - "&6/food &7- Change Food Level to Max"
+  - "&6/Farte &7- Farted Your Harts"
+  - "&6/Menu &7- Show GameSelector Menu"
+  - "&6/Fly &7- Toggle Fly Mode"
+  - "&7---------------------"
+
+cooldown-message: '&cPlease wait {time} for use Command this again'
+Messages-not-loaded: '&cConfig not loaded'
+Support-links:
+  - "&7----- Welcome To Support Links"
+  - "&c Soon Add Links"
+  - "&7Thanks for Reading"
+Menu-Title: "&bGames Selector"
+Fly-Message-Enable: '&a[Success] &7{player} Fly Mode Enable Now .Enjoy to your fly'
+Fly-Message-Disable: '&c[Error] &7{player} Fly Mode Disabled.You can''t fly anymore.'
+Death-Message: "&a{Player} &dWas Death &b{HowDeath}"
+## My Age is
