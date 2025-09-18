@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MyPlugin.iml" filepath="$PROJECT_DIR$/MyPlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FlixCore.iml" filepath="$PROJECT_DIR$/FlixCore.iml" />
     </modules>
   </component>
 </project>

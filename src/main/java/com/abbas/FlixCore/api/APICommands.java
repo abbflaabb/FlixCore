@@ -1,4 +1,4 @@
-package com.abbas.myplugin.api;
+package com.abbas.FlixCore.api;
 
 
 import org.bukkit.command.Command;

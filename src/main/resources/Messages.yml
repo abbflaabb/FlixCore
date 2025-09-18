@@ -15,15 +15,20 @@ Help-Command:
   - "&6/Menu &7- Show GameSelector Menu"
   - "&6/Fly &7- Toggle Fly Mode"
   - "&7---------------------"
-
 cooldown-message: '&cPlease wait {time} for use Command this again'
 Messages-not-loaded: '&cConfig not loaded'
 Support-links:
   - "&7----- Welcome To Support Links"
-  - "&c Soon Add Links"
+  - "&7DiscordLink: &eDiscord.Com"
+  - "&7Website: &ewww.Test.GGe.hh2"
   - "&7Thanks for Reading"
 Menu-Title: "&bGames Selector"
 Fly-Message-Enable: '&a[Success] &7{player} Fly Mode Enable Now .Enjoy to your fly'
 Fly-Message-Disable: '&c[Error] &7{player} Fly Mode Disabled.You can''t fly anymore.'
 Death-Message: "&a{Player} &dWas Death &b{HowDeath}"
+Block-Place: true
+Block-Place-Message: '&6[Block-Place] {Player} &eYou Can''t Build &d{BuidlBlock} &ePlease Not try again'
+Join-Message: '&7[+1] &a{Player} &dWelcome to Lobby'
+Disconnected-Message: '&c[Disconnected] &a{Player} has been Disconnected The {Reason}'
+Leave-Message: "&7[-1] &a{Player} Leave From Server"
 ## My Age is

@@ -1,8 +1,12 @@
 name: MyPlugin
 version: '${project.version}'
-main: com.abbas.myplugin.MyPlugin
+main: com.abbas.FlixCore.FlixCore
 api-version: '1.13'
-
+authors:
+  - Abbas
+  - Cortz_Ex
+  - 3bdoabk
+  - Parsa
 commands:
   gmc:
     description: Change game mode to creative

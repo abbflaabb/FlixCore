@@ -1,7 +1,7 @@
-package com.abbas.myplugin.MainCommands.Fly;
+package com.abbas.FlixCore.MainCommands;
 
-import com.abbas.myplugin.MyPlugin;
-import com.abbas.myplugin.api.APICommands;
+import com.abbas.FlixCore.FlixCore;
+import com.abbas.FlixCore.api.APICommands;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -11,9 +11,9 @@ import java.util.*;
 public class FlyCommand implements APICommands {
     private final HashMap<UUID, Long> cooldown;
     private final Set<UUID> PlayerHasFly;
-    private final MyPlugin instance;
+    private final FlixCore instance;
 
-    public FlyCommand(MyPlugin instance) {
+    public FlyCommand(FlixCore instance) {
         this.instance = instance;
         this.cooldown = new HashMap<>();
         this.PlayerHasFly = new HashSet<>();
@@ -23,8 +23,7 @@ public class FlyCommand implements APICommands {
         if (!(sender instanceof Player p)) {
             String errorMessage = instance.getMessagesConfig().getString("Error-Commands");
             if (errorMessage != null) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        errorMessage));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', errorMessage));
             }
             return true;
         }
@@ -61,11 +60,6 @@ public class FlyCommand implements APICommands {
         }
         return true;
     }
-
-    /// Toggle Fly Mode
-    /// @param player
-    /// @param sender
-    /// @deprecated uuid (ToggleFly)
     private void toggleFly(Player player, CommandSender sender) {
         UUID uuid = player.getUniqueId();
         if (!PlayerHasFly.contains(uuid)) {

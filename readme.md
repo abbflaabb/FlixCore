@@ -16,6 +16,8 @@
 - `/help` – Show help menu
 - `/food` – Restore hunger
 - `/farte` – Fun command 🎉
+- `/Fly` - Fly Command
+- `/Menu` - Show game Selector
 
 ---
 

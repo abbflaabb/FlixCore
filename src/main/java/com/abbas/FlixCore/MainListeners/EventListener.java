@@ -1,6 +1,7 @@
-package com.abbas.myplugin.MainListeners;
+package com.abbas.FlixCore.MainListeners;
 
-import com.abbas.myplugin.MyPlugin;
+import com.abbas.FlixCore.FlixCore;
+import com.abbas.FlixCore.Utiles.BowUtils;
 import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -21,21 +22,36 @@ import org.bukkit.potion.PotionEffectType;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.UUID;
 
 @Getter
 public class EventListener implements Listener {
+    private final FlixCore instance;
+    private final HashSet<UUID> givePlayer = new HashSet<>();
 
-    private final MyPlugin instance;
-    public EventListener(MyPlugin instance) {
+
+    public EventListener(FlixCore instance) {
         this.instance = instance;
     }
-
     @EventHandler
     public void PlayerJ(PlayerJoinEvent event) {
+        //Player GetAddress Has Been Removed
+        //Can you now Change Message From Config
+        //Add Bow if player join first time for server
         Player player = event.getPlayer();
         event.setJoinMessage(null);
-        player.sendMessage(ChatColor.GOLD + "[+1 ] Join To Server " + player.getName() + " Address Player " + player.getAddress() +  " !");
+        String joinMessage = instance.getMessagesConfig().getString("Join-Message");
+        if (joinMessage != null && !joinMessage.isEmpty()) {
+            String message = joinMessage
+                    .replace("{Player}", player.getName());
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        }
+        if (!givePlayer.contains(player.getUniqueId())) {
+            player.getInventory().addItem(BowUtils.CreateTeleportBow());
+            givePlayer.add(player.getUniqueId());
+        }
         Location loc = player.getLocation();
         player.playSound(loc , Sound.LEVEL_UP, 1.0f, 1.0f);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10000,2322, true, true));
@@ -43,7 +59,16 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
         event.setLeaveMessage(null);
-        event.setReason(ChatColor.RED + "[Disconnected] " + ChatColor.GOLD + "You have been kicked from the server!");
+        Player player = event.getPlayer();
+        //Can you now Change Message From Config
+        //Add Bow if player join first time for server
+        String disconnectedMessage =  instance.getMessagesConfig().getString("Disconnected-Message");
+        if (disconnectedMessage != null && !disconnectedMessage.isEmpty()) {
+            String message =  disconnectedMessage
+                    .replace("{Player}", player.getName())
+                    .replace("{Reason}", event.getReason());
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        }
     }
 
     @EventHandler
@@ -58,14 +83,18 @@ public class EventListener implements Listener {
     public void LeaveS(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         event.setQuitMessage(null);
-        player.sendMessage(ChatColor.RED + "[-1] Leave From Server " + player.getName() +  " Address Player " + player.getAddress());
-        Location loc = player.getLocation();
-        player.playSound(loc , Sound.VILLAGER_NO, 1.0f,1.0f);
+        String leaveMessage = instance.getMessagesConfig().getString("Leave-Message");
+        if (leaveMessage != null && !leaveMessage.isEmpty()) {
+            String leavem = leaveMessage
+                    .replace("{Player}", player.getName());
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', leavem));
+            Location loc = player.getLocation();
+            player.playSound(loc , Sound.VILLAGER_NO, 1.0f,1.0f);
+        }
     }
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-
         if (!player.isOp()) {
             String configMessage = instance.getMessagesConfig().getString("Block-Break-Message");
             if (configMessage != null && !configMessage.isEmpty()) {
@@ -75,7 +104,6 @@ public class EventListener implements Listener {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
             }
             player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1.0f, 1.0f);
-
             event.setCancelled(true);
         } else {
             event.setCancelled(false);
@@ -84,13 +112,11 @@ public class EventListener implements Listener {
     @EventHandler
     public void EXP(ExpBottleEvent event) {
         event.setExperience(0);
+        //Default Effect Remove
         event.setShowEffect(false);
-        event.getEntity().getWorld().playEffect(
-                event.getEntity().getLocation(),
-                Effect.MOBSPAWNER_FLAMES,
-                0
-
-        );
+        //PlayEffect
+        event.getEntity().getWorld().playEffect(event.getEntity().getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
+        //PlaySound
         event.getEntity().getWorld().playSound(
                 event.getEntity().getLocation(),
                 Sound.BAT_HURT,
@@ -125,7 +151,6 @@ public class EventListener implements Listener {
         }
         event.setCancelled(false);
     }
-
     @EventHandler
     public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
@@ -157,9 +182,9 @@ public class EventListener implements Listener {
         event.setCancelled(true);
     }
     @EventHandler
-    public void DamageL(EntityDamageEvent event) {
-        boolean DamageC = instance.getMessagesConfig().getBoolean("Damage-Event", true);
-        if (DamageC) {
+    public void DamageEvent(EntityDamageEvent event) {
+        boolean DamageEvent = instance.getMessagesConfig().getBoolean("Damage-Event", true);
+        if (DamageEvent) {
             event.setCancelled(true);
         }
     }
@@ -199,8 +224,6 @@ public class EventListener implements Listener {
             }
         }
     }
-
-    /// @param servername
     private void CnctSM(Player player, String servername) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
@@ -210,30 +233,25 @@ public class EventListener implements Listener {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        player.sendPluginMessage(MyPlugin.getPlugin(MyPlugin.class), "BungeeCord", b.toByteArray());
+        player.sendPluginMessage(FlixCore.getPlugin(FlixCore.class), "BungeeCord", b.toByteArray());
     }
-
     @EventHandler
-    public void dj(PlayerChangedWorldEvent event) {
+    public void ChangeWorldEvent(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
         Location location = player.getLocation();
-        player.getWorld().playSound(location, Sound.LEVEL_UP, 1.0f,1.0f);
+        player.getWorld().playSound(location, Sound.LAVA_POP, 1.0f,1.0f);
     }
     @EventHandler
-    public void HSS(PlayerDeathEvent event) {
+    public void DeathPlayerEvent(PlayerDeathEvent event) {
         Player player = event.getEntity();
         event.setDeathMessage(null);
-        String dththos = instance.getMessagesConfig().getString("Death-Message");
-
-        if (dththos != null) {
-           String Mhbsb = dththos
+        String DeathMessage = instance.getMessagesConfig().getString("Death-Message");
+        if (DeathMessage != null) {
+           String sendMessage = DeathMessage
                     .replace("{player}", player.getName())
                     .replace("{HowDeath}", player.getLastDamageCause().getCause().toString());
-
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Mhbsb));
-
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', sendMessage));
         }
     }
-
 }
 

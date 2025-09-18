@@ -1,0 +1,6 @@
+name-bow: '&aTeleportBow'
+description-bow: '&7(RightClick)'
+lore-bow:
+  - '&cShoot Your Location'
+  - '&dAnd Teleport Anywhere'
+Teleport-Bow: '&d&lYou Teleported in your Location'
