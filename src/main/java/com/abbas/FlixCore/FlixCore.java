@@ -11,7 +11,6 @@ import com.abbas.FlixCore.TeleportBow.GiveCommand;
 import com.abbas.FlixCore.TeleportBow.TeleportListener;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -40,32 +39,40 @@ public final class FlixCore extends JavaPlugin {
         getCommand("food").setExecutor(new Commands());
         getCommand("Farte").setExecutor(new Farte());
         getCommand("Menu").setExecutor(new Commands());
+        getCommand("plugins").setExecutor(new Commands());
+        getCommand("about").setExecutor(new Commands());
+
         //StartUp
         startupPlugin();
         registerEvents();
         registerCommandsWithAPI();
+        if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
+            Bukkit.getServer().getLogger().info("ProtocolLib loaded!");
+        } else {
+            Bukkit.getServer().getLogger().warning("ProtocolLib not found!");
+        }
     }
     private void startupPlugin() {
         String authors = String.join(", ", instance.getDescription().getAuthors());
-        Bukkit.getServer().getLogger().info(
-                ChatColor.BLUE + "----------------------\n" +
-                        ChatColor.RED + "Plugin Made By " + authors + "\n" +
-                        ChatColor.AQUA + "Plugin Version: " + instance.getDescription().getVersion() + "\n" +
-                        ChatColor.LIGHT_PURPLE + "Plugin Work Server Version: " + instance.getServer().getVersion() + "\n" +
-                        ChatColor.BLUE + "----------------------"
-        );
+        Bukkit.getServer().getLogger().info("----------------------");
+        Bukkit.getServer().getLogger().info("Plugin Made By " + authors);
+        Bukkit.getServer().getLogger().info("Plugin Version: " + instance.getDescription().getVersion());
+        Bukkit.getServer().getLogger().info("Plugin Work Server Version: " + instance.getServer().getVersion());
+        Bukkit.getServer().getLogger().info("----------------------");
     }
+
+
     private void registerEvents() {
         PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new EventListener(instance), this);
-        pluginManager.registerEvents(new PlaceEvent(), this);
+        pluginManager.registerEvents(new EventListener(), this);
+        pluginManager.registerEvents(new PlaceEvent(instance), this);
         pluginManager.registerEvents(new TeleportListener(instance), this);
     }
     private void registerCommandsWithAPI() {
         SupportCommand supportCommand = new SupportCommand();
         FlyCommand flyCommand =  new FlyCommand(instance);
    // For Give TeleportBow Just A test Command.⬇️
-        GiveCommand giveCommand =  new GiveCommand();
+        GiveCommand giveCommand =  new GiveCommand(instance);
         getCommand("support").setExecutor(supportCommand::CMD);
         getCommand("Fly").setExecutor(flyCommand::CMD);
         getCommand("giveT").setExecutor(giveCommand::CMD);

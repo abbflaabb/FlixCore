@@ -10,11 +10,8 @@ public class ColorUtils {
         if (text ==null) return "";
         return ChatColor.translateAlternateColorCodes('&',text);
     }
-
     public static List<String> colorize(List<String> text) {
-        return  text.stream()
-                .map(ColorUtils::colorize)
-                .collect(Collectors.toList());
+        return  text.stream().map(ColorUtils::colorize).collect(Collectors.toList());
     }
 }
 

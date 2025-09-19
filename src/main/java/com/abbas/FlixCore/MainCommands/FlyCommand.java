@@ -1,6 +1,7 @@
 package com.abbas.FlixCore.MainCommands;
 
 import com.abbas.FlixCore.FlixCore;
+import com.abbas.FlixCore.Utiles.ColorUtils;
 import com.abbas.FlixCore.api.APICommands;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,18 +43,18 @@ public class FlyCommand implements APICommands {
         cooldown.put(p.getUniqueId(), System.currentTimeMillis());
         if (args.length == 0) {
             if (!p.hasPermission("Fly.command")) {
-                p.sendMessage(ChatColor.RED + "[Error ]You Can't Use Command This Please No Try Again.");
+                p.sendMessage(ColorUtils.colorize("&c[Error] You Can't Use Command This Please No Try Again."));
                 return true;
             }
             toggleFly(p, p);
         } else if (args.length == 1) {
             if (!p.hasPermission("Fly.command.others")) {
-                p.sendMessage(ChatColor.RED + "[Error ]You Cant use This Command for Toggle Fly For Other Players! Please no try again");
+                p.sendMessage(ColorUtils.colorize("&c[Error] You Cant use This Command for Toggle Fly For Other Players! Please no try again"));
                 return true;
             }
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
-                p.sendMessage(ChatColor.RED + "[Error]" + ChatColor.DARK_PURPLE + " This Player is Not Found.");
+                p.sendMessage(ColorUtils.colorize( "&c[Error]" + ColorUtils.colorize( "&5This Player is Not Found.")));
                 return true;
             }
             toggleFly(target, p);

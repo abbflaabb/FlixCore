@@ -1,6 +1,7 @@
 package com.abbas.FlixCore.MainCommands;
 
 import com.abbas.FlixCore.FlixCore;
+import com.abbas.FlixCore.Utiles.ColorUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -32,16 +33,16 @@ public class Farte implements CommandExecutor {
                     if (cdMessage != null) {sender.sendMessage(ChatColor.translateAlternateColorCodes('&', cdMessage.replace("{time}", String.valueOf(timeLeft))));
                     }return true;}
             }if (args.length == 0){
-                p.sendMessage(ChatColor.RED + "You Are so nasty. you have Just farted all over yourSelf.");
+                p.sendMessage(ColorUtils.colorize("&cYou Are so nasty. you have Just farted all over yourSelf."));
                 p.setHealth(0.0);
             }else {
                 String name =  args[0];
                 Player target = Bukkit.getServer().getPlayerExact(name);
                 if (target == null) {
-                    p.sendMessage(ChatColor.RED + "[Error] " + ChatColor.GRAY + "This Player Are Not Online Please.Try Letter");
+                    p.sendMessage(ColorUtils.colorize( "&c[Error] " + ColorUtils.colorize("&7This Player Are Not Online Please.Try Letter")));
                 } else {
-                    p.sendMessage(ChatColor.AQUA  + "Success Farted Your Harts " + target.getDisplayName());
-                    target.sendMessage(ChatColor.DARK_GREEN + "You Have just Been Farted on " + target.getDisplayName() + ". That Make you feel?");
+                    p.sendMessage(ColorUtils.colorize("&bSuccess Farted Your Harts " + target.getDisplayName()));
+                    target.sendMessage(ColorUtils.colorize("&2You Have just Been Farted on " + target.getDisplayName() + ". That Make you feel?"));
                     target.setHealth(0.0);}}}
         return true;
     }

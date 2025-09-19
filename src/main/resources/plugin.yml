@@ -1,4 +1,4 @@
-name: MyPlugin
+name: FlixCore
 version: '${project.version}'
 main: com.abbas.FlixCore.FlixCore
 api-version: '1.13'
@@ -31,12 +31,21 @@ commands:
     usage: /<command>
   Menu:
     usage: /<command>
-
   Fly:
     description: Toggle Fly Mode
     usage: /<command>
-
-
+  giveT:
+    description: JustTestGiveBow
+    usage: /<command>
+  BanGui:
+    description: For See Players Ban
+    usage: /<command>
+  plugins:
+    description: newDesign LockPlugins Server
+    usage: /<command>
+  about:
+    description: For See About Server Like Version And ListPlugins
+    usage: /<command>
 permissions:
   myplugin.bypass:
     description: Allows access to Events
@@ -50,4 +59,6 @@ permissions:
   Fly.command.others:
     description: for Flay Others Players
     default: op
-
+  spawn.Entity:
+    description: for Spawn Entity Player Move
+    default: op

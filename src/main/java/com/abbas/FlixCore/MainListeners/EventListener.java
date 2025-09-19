@@ -2,6 +2,12 @@ package com.abbas.FlixCore.MainListeners;
 
 import com.abbas.FlixCore.FlixCore;
 import com.abbas.FlixCore.Utiles.BowUtils;
+import com.abbas.FlixCore.Utiles.ColorUtils;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
 import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -30,31 +36,34 @@ import java.util.UUID;
 public class EventListener implements Listener {
     private final FlixCore instance;
     private final HashSet<UUID> givePlayer = new HashSet<>();
-
-
-    public EventListener(FlixCore instance) {
-        this.instance = instance;
+    private final ProtocolManager protocolManager;
+    public EventListener() {
+        this.instance = FlixCore.getInstance();
+        this.protocolManager = ProtocolLibrary.getProtocolManager();
+        protocolManager.addPacketListener(new PacketAdapter(instance, PacketType.Play.Server.SPAWN_ENTITY_LIVING) {
+            @Override
+            public void onPacketSending(PacketEvent event) {
+                Player receiver = event.getPlayer();
+                if (!receiver.hasPermission("spawn.Entity")) {
+                    event.setCancelled(true);
+                }
+            }
+        });
     }
     @EventHandler
     public void PlayerJ(PlayerJoinEvent event) {
-        //Player GetAddress Has Been Removed
-        //Can you now Change Message From Config
-        //Add Bow if player join first time for server
         Player player = event.getPlayer();
         event.setJoinMessage(null);
-        String joinMessage = instance.getMessagesConfig().getString("Join-Message");
+        String joinMessage = FlixCore.getInstance().getMessagesConfig().getString("Join-Message");
         if (joinMessage != null && !joinMessage.isEmpty()) {
-            String message = joinMessage
-                    .replace("{Player}", player.getName());
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            player.sendMessage(ColorUtils.colorize(joinMessage.replace("{Player}", player.getName())));
         }
-        if (!givePlayer.contains(player.getUniqueId())) {
-            player.getInventory().addItem(BowUtils.CreateTeleportBow());
-            givePlayer.add(player.getUniqueId());
-        }
-        Location loc = player.getLocation();
-        player.playSound(loc , Sound.LEVEL_UP, 1.0f, 1.0f);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10000,2322, true, true));
+        boolean hasBow = false;
+        String teleportBowName = FlixCore.getInstance().getTeleportBow().getString("name-bow", "");
+        for (ItemStack item : player.getInventory().getContents()) {if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {if (item.getItemMeta().getDisplayName().contains(ColorUtils.colorize(teleportBowName))) {hasBow = true;break;}}}
+        if (!hasBow) {ItemStack teleportBow = BowUtils.CreateTeleportBow(FlixCore.getInstance());player.getInventory().addItem(teleportBow);player.getInventory().addItem(new ItemStack(Material.ARROW, 1));}
+        player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0f, 1.0f);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1, true, true));
     }
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
@@ -67,7 +76,7 @@ public class EventListener implements Listener {
             String message =  disconnectedMessage
                     .replace("{Player}", player.getName())
                     .replace("{Reason}", event.getReason());
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            player.sendMessage(ColorUtils.colorize(message));
         }
     }
 
@@ -87,7 +96,7 @@ public class EventListener implements Listener {
         if (leaveMessage != null && !leaveMessage.isEmpty()) {
             String leavem = leaveMessage
                     .replace("{Player}", player.getName());
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', leavem));
+            player.sendMessage(ColorUtils.colorize(leavem));
             Location loc = player.getLocation();
             player.playSound(loc , Sound.VILLAGER_NO, 1.0f,1.0f);
         }
@@ -101,7 +110,7 @@ public class EventListener implements Listener {
                 String message = configMessage
                         .replace("{Player}", player.getName())
                         .replace("{Block}", event.getBlock().getType().toString());
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                player.sendMessage(ColorUtils.colorize(message));
             }
             player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1.0f, 1.0f);
             event.setCancelled(true);
@@ -130,10 +139,10 @@ public class EventListener implements Listener {
         Entity entity = event.getEntity();
         if (entity.getType() == EntityType.SHEEP) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "[Error] You Can't Shear Sheep Now!");
+            player.sendMessage(ColorUtils.colorize( "&c[Error] You Can't Shear Sheep Now!"));
 
         } else {
-            player.sendMessage(ChatColor.GREEN + "[Success] You Shear " + entity.getType() + "!");
+            player.sendMessage(ColorUtils.colorize( "&a[Success] You Shear " + entity.getType() + "!"));
         }
     }
     /**
@@ -145,9 +154,8 @@ public class EventListener implements Listener {
         Player player = event.getPlayer();
         String configMessage = instance.getMessagesConfig().getString("Chat-Format");
         if (configMessage != null && !configMessage.isEmpty()) {
-            String message = configMessage.replace("{Player}", player.getName())
-                    .replace("{Message}", event.getMessage());
-            event.setFormat(ChatColor.translateAlternateColorCodes('&', message));
+            String message = configMessage.replace("{Player}", player.getName()).
+                    replace("{Message}", event.getMessage());event.setFormat(ColorUtils.colorize(message));
         }
         event.setCancelled(false);
     }
@@ -156,21 +164,15 @@ public class EventListener implements Listener {
         Player player = event.getPlayer();
         String cmd = event.getMessage().toLowerCase();
         String commandError = instance.getMessagesConfig().getString("Error-Commands");
-        if (commandError == null || commandError.isEmpty()) {
-            return;
-        }
-        String message = ChatColor.translateAlternateColorCodes('&',
-                commandError.replace("{Player}", player.getName()));
+        if (commandError == null || commandError.isEmpty()) {return;}
+        String message = ChatColor.translateAlternateColorCodes('&', commandError.replace("{Player}", player.getName()));
         String[] BlockedCommands = {
                 "/op", "/?", "/pl", "/plugins",
                 "/bukkit:pl", "/bukkit:plugins", "/bukkit:ver", "/bukkit:version",
-                "/bukkit:about", "/ver", "/version", "/about"
-        };
+                "/bukkit:about", "/ver", "/version", "/about"};
         for (String blockedCmd : BlockedCommands) {
             if (cmd.startsWith(blockedCmd)) {
-                if (player.hasPermission("Plugin.bypass")) {
-                    return;
-                }
+                if (player.hasPermission("Plugin.bypass")) {return;}
                 event.setCancelled(true);
                 player.sendMessage(message);
                 break;
@@ -197,7 +199,7 @@ public class EventListener implements Listener {
         if (DropIM != null && !DropIM.isEmpty()) {
             String message = DropIM.replace("{Player}", player.getName())
                     .replace("{Item}", event.getItemDrop().getItemStack().getType().name());
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            player.sendMessage(ColorUtils.colorize(message));
         }
     }
     @EventHandler
@@ -207,7 +209,7 @@ public class EventListener implements Listener {
         String BedEnter = instance.getMessagesConfig().getString("Bed-Enter");
         if (BedEnter != null && !BedEnter.isEmpty()) {
             String BedEnterMessage = BedEnter.replace("{Player}", player.getName());
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', BedEnterMessage));
+            player.sendMessage(ColorUtils.colorize(BedEnterMessage));
         }
     }
     @EventHandler
@@ -253,5 +255,12 @@ public class EventListener implements Listener {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', sendMessage));
         }
     }
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        if (player.hasPermission("spawn.Entity")) {
+            Entity entity = player.getWorld().spawnEntity(player.getLocation(), EntityType.COW);
+            entity.setCustomName(ColorUtils.colorize("&d&lMy CCOWW"));
+        }
+    }
 }
-

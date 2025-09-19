@@ -1,6 +1,7 @@
 package com.abbas.FlixCore.MainCommands;
 
 import com.abbas.FlixCore.FlixCore;
+import com.abbas.FlixCore.Utiles.ColorUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,7 +22,7 @@ public class HelpCommand implements CommandExecutor {
     public boolean onCommand(CommandSender se, Command command, String label, String[] args) {
         if (!command.getName().equalsIgnoreCase("help")) return false;
         if (!(se instanceof Player)) {
-            se.sendMessage(ChatColor.RED + "This command can only be used by players!");
+            se.sendMessage(ColorUtils.colorize( "&cThis command can only be used by players!"));
             return true;
         }
         Player player = (Player) se;
@@ -45,7 +46,7 @@ public class HelpCommand implements CommandExecutor {
             if (notLoaded != null) {
                 se.sendMessage(ChatColor.translateAlternateColorCodes('&', notLoaded));
             } else {
-                se.sendMessage(ChatColor.RED + "Messages not loaded!");
+                se.sendMessage(ColorUtils.colorize("&cMessages not loaded!"));
             }
             return true;
         }

@@ -1,6 +1,7 @@
 package com.abbas.FlixCore.MainCommands;
 
 import com.abbas.FlixCore.FlixCore;
+import com.abbas.FlixCore.Utiles.ColorUtils;
 import com.abbas.FlixCore.api.APICommands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -24,7 +25,7 @@ public class SupportCommand implements APICommands {
                 long timeLeft = (cooldownTime - timeElapsed) / 1000;
                 String cdMessage = FlixCore.getInstance().getMessagesConfig().getString("cooldown-message");
                 if (cdMessage != null) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', cdMessage.replace("{time}", String.valueOf(timeLeft))));
+                    sender.sendMessage(ColorUtils.colorize(cdMessage.replace("{time}", String.valueOf(timeLeft))));
                 }
                 return true;
             }
@@ -33,7 +34,7 @@ public class SupportCommand implements APICommands {
         List<String> supportMessages = FlixCore.getInstance().getMessagesConfig().getStringList("Support-links");
         if (supportMessages != null && !supportMessages.isEmpty()) {
             for (String line : supportMessages) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', line.replace("{Player}", sender.getName())));
+                sender.sendMessage(ColorUtils.colorize(line.replace("{Player}", sender.getName())));
             }
         } else {
             sender.sendMessage(FlixCore.getInstance().getMessagesConfig().getString("Messages-not-loaded"));
