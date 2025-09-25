@@ -3,7 +3,6 @@ package com.abbas.FlixCore.MainCommands;
 import com.abbas.FlixCore.FlixCore;
 import com.abbas.FlixCore.Utiles.ColorUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,13 +13,15 @@ import java.util.UUID;
 
 public class Farte implements CommandExecutor {
     private final HashMap<UUID, Long> cooldown;
-
     public Farte() {
         this.cooldown = new HashMap<>();
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!sender.hasPermission("Plugin.Admin")) {
+            sender.sendMessage(ColorUtils.colorize("&cYou Not Allowed Use This Command"));
+
+        }
         if (sender instanceof Player p) {
             long cooldownTime = 10000;
             if (!this.cooldown.containsKey(p.getUniqueId())) {
@@ -30,7 +31,7 @@ public class Farte implements CommandExecutor {
                     this.cooldown.put(p.getUniqueId(), System.currentTimeMillis());} else {
                     long timeLeft = (cooldownTime - timeElapsed) / 1000;
                     String cdMessage = FlixCore.getInstance().getMessagesConfig().getString("cooldown-message");
-                    if (cdMessage != null) {sender.sendMessage(ChatColor.translateAlternateColorCodes('&', cdMessage.replace("{time}", String.valueOf(timeLeft))));
+                    if (cdMessage != null) {sender.sendMessage(ColorUtils.colorize(cdMessage.replace("{time}", String.valueOf(timeLeft))));
                     }return true;}
             }if (args.length == 0){
                 p.sendMessage(ColorUtils.colorize("&cYou Are so nasty. you have Just farted all over yourSelf."));

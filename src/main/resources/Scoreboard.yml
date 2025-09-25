@@ -3,10 +3,11 @@
 #            Plugin by Abbas                    #
 #                                               #
 #################################################
-name-bow: '&aTeleportBow'
-description-bow: '&7(RightClick)'
-lore-bow:
-  - '&cShoot Your Location'
-  - '&dAnd Teleport Anywhere'
-Teleport-Bow: '&d&lYou Teleported in your Location'
-Player-NotFound: '&d&lthis Player Not Found'
+scoreboard:
+  title: "&d&lFlix&b&lCore"
+  lines:
+    - "&7────────────"
+    - "&ePlayer: &f{player}"
+    - "&eOnline: &f{online}"
+    - "&eRank: {rank}"
+    - "&7────────────"

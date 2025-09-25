@@ -26,6 +26,8 @@ commands:
     description: Make your Food Full
     usage: /<command>
   Farte:
+    description: For FunCommand
+    usage: /<command>
   Support:
     description: for SupportLink
     usage: /<command>
@@ -37,17 +39,41 @@ commands:
   giveT:
     description: JustTestGiveBow
     usage: /<command>
-  BanGui:
+  Vanish:
     description: For See Players Ban
     usage: /<command>
-  plugins:
+  pp:
     description: newDesign LockPlugins Server
     usage: /<command>
   about:
     description: For See About Server Like Version And ListPlugins
     usage: /<command>
+  Tp:
+    description: For Tp to any player
+    usage: /<command>
+  TpAll:
+    description: For Tp all players to u
+    usage: /<command>
+  SetSpawn:
+    description: SetSpawnCommand
+    usage: /<command>
+  Spawn:
+    description: SpawnCommand
+    usage: /<command>
+    aliases:
+      - lobby
+      - hub
+      - l
+      - h
+  Rank:
+    description: For RankPlayer
+    usage: /<command>
+    aliases:
+      - r
+      - rp
+      - ran
 permissions:
-  myplugin.bypass:
+  Plugin.bypass:
     description: Allows access to Events
     default: op
   Plugin.Admin:
@@ -61,4 +87,10 @@ permissions:
     default: op
   spawn.Entity:
     description: for Spawn Entity Player Move
+    default: op
+  Player.TeleportBow:
+    description: for give A bow if u dont have and command/giveT
+    default: op
+  FlixCore.setSpawn:
+    description: For SetSpawn Players All
     default: op

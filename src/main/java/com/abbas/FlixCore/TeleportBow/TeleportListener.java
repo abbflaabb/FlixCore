@@ -20,7 +20,6 @@ public class TeleportListener implements Listener {
     @EventHandler
     public void onTeleportBow(ProjectileHitEvent e) {
         if (!(e.getEntity().getShooter() instanceof Player p)) return;
-
         ItemStack itemInHand = p.getItemInHand();
         if (itemInHand != null && itemInHand.hasItemMeta() && itemInHand.getItemMeta().hasDisplayName()) {
             String name = itemInHand.getItemMeta().getDisplayName();

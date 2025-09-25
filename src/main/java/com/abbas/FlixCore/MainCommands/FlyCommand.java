@@ -4,7 +4,6 @@ import com.abbas.FlixCore.FlixCore;
 import com.abbas.FlixCore.Utiles.ColorUtils;
 import com.abbas.FlixCore.api.APICommands;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,7 +23,7 @@ public class FlyCommand implements APICommands {
         if (!(sender instanceof Player p)) {
             String errorMessage = instance.getMessagesConfig().getString("Error-Commands");
             if (errorMessage != null) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', errorMessage));
+                sender.sendMessage(ColorUtils.colorize((errorMessage)));
             }
             return true;
         }
@@ -35,7 +34,7 @@ public class FlyCommand implements APICommands {
                 long timeLeft = (cooldownTime - timeElapsed) / 1000;
                 String cdMessage = instance.getMessagesConfig().getString("cooldown-message");
                 if (cdMessage != null) {
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', cdMessage.replace("{time}", String.valueOf(timeLeft))));
+                    p.sendMessage(ColorUtils.colorize(((cdMessage.replace("{time}", String.valueOf(timeLeft))))));
                 }
                 return true;
             }
@@ -69,14 +68,14 @@ public class FlyCommand implements APICommands {
 
             String flyMessages = instance.getMessagesConfig().getString("Fly-Message-Enable");
             if (flyMessages != null) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', flyMessages.replace("{player}", player.getName())));
+                sender.sendMessage(ColorUtils.colorize(flyMessages.replace("{player}", player.getName())));
             }
         } else {
             PlayerHasFly.remove(uuid);
             player.setAllowFlight(false);
             String flyMessages = instance.getMessagesConfig().getString("Fly-Message-Disable");
             if (flyMessages != null) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', flyMessages.replace("{player}", player.getName())));
+                sender.sendMessage(ColorUtils.colorize((flyMessages.replace("{player}", player.getName()))));
             }
         }
     }

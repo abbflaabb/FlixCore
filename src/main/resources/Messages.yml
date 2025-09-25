@@ -1,3 +1,8 @@
+#################################################
+#                                               #
+#            Plugin by Abbas                    #
+#                                               #
+#################################################
 Block-Break-Message: '&c[BlockBreak] {Player} &dYou can''t break blocks here! {Block}'
 Chat-Format: '&7[&a{Player}&7]: &f{Message}'
 Damage-Event: true
@@ -11,9 +16,13 @@ Help-Command:
   - "&6/heal &7- Heal yourself or another player"
   - "&6/backbed &7- Go back to your last location"
   - "&6/food &7- Change Food Level to Max"
-  - "&6/Farte &7- Farted Your Harts"
+  - "&6/Farte &7- Farted Your Harts(FunCommand)"
   - "&6/Menu &7- Show GameSelector Menu"
   - "&6/Fly &7- Toggle Fly Mode"
+  - "&6/support &7-Show SupportLinks"
+  - "&6/plugins &7- For Show Plugins Server Just For Admins"
+  - "&6/Vanish &7- For Vanish Player"
+  - "&6/about &7-For see About Server Just Admin"
   - "&7---------------------"
 cooldown-message: '&cPlease wait {time} for use Command this again'
 Messages-not-loaded: '&cConfig not loaded'

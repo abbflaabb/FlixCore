@@ -2,6 +2,7 @@ package com.abbas.FlixCore.MainCommands;
 
 import com.abbas.FlixCore.FlixCore;
 import com.abbas.FlixCore.Utiles.ColorUtils;
+import e.com.abbas.LuckPermsAPI.Perms;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -66,7 +67,7 @@ public class Commands implements CommandExecutor {
                 p.sendMessage(ColorUtils.colorize("&a&lChange Food Level to Max"));
             }
             //ForShow PluginsServer
-            if (command.getName().equalsIgnoreCase("plugins")) {
+            if (command.getName().equalsIgnoreCase("pp")) {
                 Plugin[] plugins = Bukkit.getPluginManager().getPlugins();
                 StringBuilder listPluginsInServer =
                         new StringBuilder(ColorUtils.colorize("&d&lPlugins: "));
@@ -85,24 +86,27 @@ public class Commands implements CommandExecutor {
                 }
                 return true;
             }
-            if (command.getName().equalsIgnoreCase("BanGui")) {
-
-            }
-            if (command.getName().equalsIgnoreCase("menu")) {
-                String menuTitle = FlixCore.getInstance().getMessagesConfig().getString("Menu-Title");
-                String TitleColor = ChatColor.translateAlternateColorCodes('&', menuTitle);
-                Inventory inventory = Bukkit.createInventory(p, 9, TitleColor);
-                ItemStack bed = new ItemStack(Material.BED);
-                ItemMeta bedMeta = bed.getItemMeta();
-
-                bedMeta.setDisplayName(ColorUtils.colorize("&f&lBed") + ColorUtils.colorize("&c&lWars"));
-                bedMeta.setLore(List.of(
-                        ColorUtils.colorize("&9Protect this bed at all costs!"),
-                        ColorUtils.colorize("&7&lYour team respawns as long as this bed is intact."),
-                        ColorUtils.colorize("&e&lDestroy enemy beds to win the game!")));
-                bed.setItemMeta(bedMeta);
-                inventory.setItem(4, bed);
-                p.openInventory(inventory); return true;}
+        if (command.getName().equalsIgnoreCase("Rank")) {
+            String rank = Perms.getPlayerRank(p);
+            p.sendMessage(ColorUtils.colorize("&a&lYour Rank is:" + rank));
+            return true;
+        } else {
+            sender.sendMessage(ColorUtils.colorize("&c&lCommand executed by player"));
+        }
+        if (command.getName().equalsIgnoreCase("menu")) {
+            String menuTitle = FlixCore.getInstance().getMessagesConfig().getString("Menu-Title");
+            String TitleColor = ChatColor.translateAlternateColorCodes('&', menuTitle);
+            Inventory inventory = Bukkit.createInventory(p, 9, TitleColor);
+            ItemStack bed = new ItemStack(Material.BED);
+            ItemMeta bedMeta = bed.getItemMeta();
+            bedMeta.setDisplayName(ColorUtils.colorize("&f&lBed") + ColorUtils.colorize("&c&lWars"));
+            bedMeta.setLore(List.of(
+                    ColorUtils.colorize("&9Protect this bed at all costs!"),
+                    ColorUtils.colorize("&7&lYour team respawns as long as this bed is intact."),
+                    ColorUtils.colorize("&e&lDestroy enemy beds to win the game!")));
+            bed.setItemMeta(bedMeta);
+            inventory.setItem(4, bed);
+            p.openInventory(inventory); return true;}
         } else if (sender instanceof ConsoleCommandSender) {sender.sendMessage(ColorUtils.colorize("&c&lYou cant use command in Console"));}return true;
     }
 }

@@ -3,7 +3,6 @@ package com.abbas.FlixCore.MainListeners;
 import com.abbas.FlixCore.FlixCore;
 import com.abbas.FlixCore.Utiles.BowUtils;
 import com.abbas.FlixCore.Utiles.ColorUtils;
-import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -32,6 +31,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.comphenix.protocol.PacketType.Play.Server.SPAWN_ENTITY_LIVING;
+
 @Getter
 public class EventListener implements Listener {
     private final FlixCore instance;
@@ -40,7 +41,7 @@ public class EventListener implements Listener {
     public EventListener() {
         this.instance = FlixCore.getInstance();
         this.protocolManager = ProtocolLibrary.getProtocolManager();
-        protocolManager.addPacketListener(new PacketAdapter(instance, PacketType.Play.Server.SPAWN_ENTITY_LIVING) {
+        protocolManager.addPacketListener(new PacketAdapter(instance, SPAWN_ENTITY_LIVING) {
             @Override
             public void onPacketSending(PacketEvent event) {
                 Player receiver = event.getPlayer();
@@ -83,7 +84,7 @@ public class EventListener implements Listener {
     @EventHandler
     public void LeaveBed(PlayerBedLeaveEvent event) {
         Player player = event.getPlayer();
-        player.sendMessage(ChatColor.YELLOW + "[important] You Leave Bed " + player.getName() + "!");
+        player.sendMessage(ColorUtils.colorize( "&e&l[important] You Leave Bed ") + player.getName() + "!");
         player.damage(2.0);
         Location loc = player.getLocation();
         player.playSound(loc , Sound.BAT_TAKEOFF, 1.0f, 1.0f);
@@ -165,7 +166,7 @@ public class EventListener implements Listener {
         String cmd = event.getMessage().toLowerCase();
         String commandError = instance.getMessagesConfig().getString("Error-Commands");
         if (commandError == null || commandError.isEmpty()) {return;}
-        String message = ChatColor.translateAlternateColorCodes('&', commandError.replace("{Player}", player.getName()));
+        String message = ColorUtils.colorize(commandError.replace("{Player}", player.getName()));
         String[] BlockedCommands = {
                 "/op", "/?", "/pl", "/plugins",
                 "/bukkit:pl", "/bukkit:plugins", "/bukkit:ver", "/bukkit:version",
@@ -252,7 +253,7 @@ public class EventListener implements Listener {
            String sendMessage = DeathMessage
                     .replace("{player}", player.getName())
                     .replace("{HowDeath}", player.getLastDamageCause().getCause().toString());
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', sendMessage));
+            player.sendMessage(ColorUtils.colorize(sendMessage));
         }
     }
     @EventHandler

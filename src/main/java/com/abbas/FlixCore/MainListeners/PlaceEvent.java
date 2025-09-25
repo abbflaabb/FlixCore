@@ -2,7 +2,6 @@ package com.abbas.FlixCore.MainListeners;
 
 import com.abbas.FlixCore.FlixCore;
 import com.abbas.FlixCore.Utiles.ColorUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
