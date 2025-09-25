@@ -82,7 +82,7 @@ Blocks usage of:
 <dependency>
     <groupId>com.github.abbflaabb</groupId>
     <artifactId>FlixCore</artifactId>
-    <version>1.2</version>
+    <version>Use Any version available</version>
 </dependency>
 
 <repositories>
