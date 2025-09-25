@@ -97,7 +97,7 @@ Blocks usage of:
 
 ## ⚡ Notes
 
-* This plugin is still in **Release (1.2)**
+* This plugin is still in **Release (1.3)**
 * Future updates will include:
 
     * More customization
