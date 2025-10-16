@@ -13,21 +13,15 @@ import java.io.IOException;
 
 public class SetSpawnCommand implements APICommands {
     private final FlixCore instance;
-
     public SetSpawnCommand(FlixCore instance) {
         this.instance = instance;
     }
-
     @Override
     public boolean CMD(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
             if (!player.hasPermission("FlixCore.setSpawn")) {
-                player.sendMessage(ColorUtils.colorize("&c&l[Error] You don’t have permission to use this command."));
-                return true;
-            }
-
+                player.sendMessage(ColorUtils.colorize("&c&l[Error] You don’t have permission to use this command."));return true;}
             Location loca = player.getLocation();
-
             instance.getSpawnLoc().set("spawn.world", loca.getWorld().getName());
             instance.getSpawnLoc().set("spawn.x", loca.getX());
             instance.getSpawnLoc().set("spawn.y", loca.getY());

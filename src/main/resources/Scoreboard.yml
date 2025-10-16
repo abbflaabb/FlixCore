@@ -6,8 +6,11 @@
 scoreboard:
   title: "&d&lFlix&b&lCore"
   lines:
+    - "%flixcore_time%"
     - "&7────────────"
-    - "&ePlayer: &f{player}"
-    - "&eOnline: &f{online}"
-    - "&eRank: {rank}"
+    - "&ePlayer: &f%flixcore_player_name%"
+    - "&eOnline: &f%flixcore_server_online_formatted%"
+    - "&eRank: %flixcore_player_rank%"
+    - "&cPing: %flixcore_player_ping%ms"
     - "&7────────────"
+scoreboard-change-world-title: "&d&lFlix&b&lCore"

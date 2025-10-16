@@ -45,23 +45,30 @@ public class Commands implements CommandExecutor {
                     String cdMessage = FlixCore.getInstance().getMessagesConfig().getString("cooldown-message");
                     if (cdMessage != null) {
                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', cdMessage.replace("{time}", String.valueOf(timeLeft))));
-                    }return true;
+                    }
+                    return true;
                 }
             }
             if (command.getName().equalsIgnoreCase("gmc")) {
                 p.setGameMode(org.bukkit.GameMode.CREATIVE);
-                p.sendMessage(ColorUtils.colorize("&a&lYour Game Mode Has Been Changed To Creative"));}
+                p.sendMessage(ColorUtils.colorize("&a&lYour Game Mode Has Been Changed To Creative"));
+            }
             if (command.getName().equalsIgnoreCase("gms")) {
                 p.setGameMode(org.bukkit.GameMode.SURVIVAL);
-                p.sendMessage(ColorUtils.colorize("&a&lYour Game Mode Has Been Changed To Survival"));}
+                p.sendMessage(ColorUtils.colorize("&a&lYour Game Mode Has Been Changed To Survival"));
+            }
             if (command.getName().equalsIgnoreCase("heal")) {
                 p.setHealth(20);
-                p.sendMessage(ColorUtils.colorize("&a&lYou Have Been Healed"));}
+                p.sendMessage(ColorUtils.colorize("&a&lYou Have Been Healed"));
+            }
             if (command.getName().equalsIgnoreCase("backBed")) {
                 if (p.getBedSpawnLocation() != null) {
                     p.teleport(p.getBedSpawnLocation());
                     p.sendMessage(ColorUtils.colorize("&a&lTeleported to your bed spawn location."));
-                } else {p.sendMessage(ColorUtils.colorize("&c&lYou don't have a bed spawn location set."));}}
+                } else {
+                    p.sendMessage(ColorUtils.colorize("&c&lYou don't have a bed spawn location set."));
+                }
+            }
             if (command.getName().equalsIgnoreCase("food")) {
                 p.setFoodLevel(20);
                 p.sendMessage(ColorUtils.colorize("&a&lChange Food Level to Max"));
@@ -74,7 +81,7 @@ public class Commands implements CommandExecutor {
                 for (Plugin plugin : plugins) {
                     listPluginsInServer.append(plugin.getName()).append(", ");
                 }
-                if (!listPluginsInServer.isEmpty()) listPluginsInServer.setLength(listPluginsInServer.length() -2 );
+                if (!listPluginsInServer.isEmpty()) listPluginsInServer.setLength(listPluginsInServer.length() - 2);
                 p.sendMessage(listPluginsInServer.toString());
             }
             //New Design For About Server
@@ -86,27 +93,7 @@ public class Commands implements CommandExecutor {
                 }
                 return true;
             }
-        if (command.getName().equalsIgnoreCase("Rank")) {
-            String rank = Perms.getPlayerRank(p);
-            p.sendMessage(ColorUtils.colorize("&a&lYour Rank is:" + rank));
-            return true;
-        } else {
-            sender.sendMessage(ColorUtils.colorize("&c&lCommand executed by player"));
         }
-        if (command.getName().equalsIgnoreCase("menu")) {
-            String menuTitle = FlixCore.getInstance().getMessagesConfig().getString("Menu-Title");
-            String TitleColor = ChatColor.translateAlternateColorCodes('&', menuTitle);
-            Inventory inventory = Bukkit.createInventory(p, 9, TitleColor);
-            ItemStack bed = new ItemStack(Material.BED);
-            ItemMeta bedMeta = bed.getItemMeta();
-            bedMeta.setDisplayName(ColorUtils.colorize("&f&lBed") + ColorUtils.colorize("&c&lWars"));
-            bedMeta.setLore(List.of(
-                    ColorUtils.colorize("&9Protect this bed at all costs!"),
-                    ColorUtils.colorize("&7&lYour team respawns as long as this bed is intact."),
-                    ColorUtils.colorize("&e&lDestroy enemy beds to win the game!")));
-            bed.setItemMeta(bedMeta);
-            inventory.setItem(4, bed);
-            p.openInventory(inventory); return true;}
-        } else if (sender instanceof ConsoleCommandSender) {sender.sendMessage(ColorUtils.colorize("&c&lYou cant use command in Console"));}return true;
+       return true;
     }
 }

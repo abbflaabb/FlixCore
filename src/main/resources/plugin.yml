@@ -31,8 +31,6 @@ commands:
   Support:
     description: for SupportLink
     usage: /<command>
-  Menu:
-    usage: /<command>
   Fly:
     description: Toggle Fly Mode
     usage: /<command>
@@ -72,6 +70,27 @@ commands:
       - r
       - rp
       - ran
+  broadcast:
+    description: BroadcastMessage
+    usage: /<command> <message>
+    aliases:
+      - bc
+  ClearChat:
+    description: ClearChat
+    usage: /<command> [number of lines]
+    aliases:
+      - cc
+  Ping:
+    description: Show Your Ping
+    usage: /<command>
+  Rules:
+    description: Show Server Rules
+    usage: /<command>
+    aliases:
+      - rules
+      - rls
+      - rule
+      - rl
 permissions:
   Plugin.bypass:
     description: Allows access to Events
@@ -94,3 +113,18 @@ permissions:
   FlixCore.setSpawn:
     description: For SetSpawn Players All
     default: op
+  FlixCore.broadcast:
+    description: For Broadcast Message
+    default: op
+  FlixCore.ClearChat:
+    description: For ClearChat
+    default: op
+  FlixCore.Ping:
+    description: For See Your Ping
+    default: true
+  Flixcore.JumpMode:
+    description: For JumpMode
+    default: op
+  Flixcore.Rank:
+    description: For See Your Rank
+    default: true

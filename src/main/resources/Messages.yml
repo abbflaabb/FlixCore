@@ -3,26 +3,33 @@
 #            Plugin by Abbas                    #
 #                                               #
 #################################################
-Block-Break-Message: '&c[BlockBreak] {Player} &dYou can''t break blocks here! {Block}'
-Chat-Format: '&7[&a{Player}&7]: &f{Message}'
+Block-Break-Message: '&c[BlockBreak] %flixcore_player_name% &dYou can''t break blocks here! {Block}'
+Chat-Format: '&7[&a%flixcore_player_name%&7]: &f{Message}'
 Damage-Event: true
-Drop-Item: '&c[Drop-Items] {Player} &dYou can''t Drop Items {Item}'
-Bed-Enter: '&c[Bed-Enter] {Player} &dYou Can''t Enter To Bed this Feature Has Been Disabled From Owner Server Please Dont Try Again'
+Drop-Item: '&c[Drop-Items] %flixcore_player_name% &dYou can''t Drop Items {Item}'
+Bed-Enter: '&c[Bed-Enter] %flixcore_player_name% &dYou Can''t Enter To Bed this Feature Has Been Disabled From Owner Server Please Dont Try Again'
 Error-Commands: '&c[Error] You Not Allowed Use this CMD'
 Help-Command:
   - "&7----- Help Commands -----"
-  - "&6/gmc &7- Change game mode to creative"
-  - "&6/gms &7- Change game mode to survival"
-  - "&6/heal &7- Heal yourself or another player"
+  - "&6/gmc &7- Change game mode to creative (Just Admins)"
+  - "&6/gms &7- Change game mode to survival (Just Admins)"
+  - "&6/heal &7- Heal yourself or another player "
   - "&6/backbed &7- Go back to your last location"
-  - "&6/food &7- Change Food Level to Max"
+  - "&6/food &7- Change Food Level to Max "
   - "&6/Farte &7- Farted Your Harts(FunCommand)"
   - "&6/Menu &7- Show GameSelector Menu"
   - "&6/Fly &7- Toggle Fly Mode"
   - "&6/support &7-Show SupportLinks"
-  - "&6/plugins &7- For Show Plugins Server Just For Admins"
-  - "&6/Vanish &7- For Vanish Player"
-  - "&6/about &7-For see About Server Just Admin"
+  - "&6/plugins &7- For Show Plugins Server (Just Admins)"
+  - "&6/Vanish &7- For Vanish Player (Just Admins)"
+  - "&6/about &7-For see About Server (Just Admins)"
+  - "&6/tp &7- For Tp to any player (Just Admins)"
+  - "&6/tpall &7- For Tp all players to u (Just Admins)"
+  - "&6/setspawn &7- Set Spawn Point (Just Admins)"
+  - "&6/spawn &7- Teleport to Spawn Point"
+  - "&6/clearchat &7- Clear The Chat (Just Admins)"
+  - "&6/ping &7- Show Your Ping"
+  - "&6/broadcast &7- Send Message to All Players (Just Admins)"
   - "&7---------------------"
 cooldown-message: '&cPlease wait {time} for use Command this again'
 Messages-not-loaded: '&cConfig not loaded'
@@ -32,12 +39,29 @@ Support-links:
   - "&7Website: &ewww.Test.GGe.hh2"
   - "&7Thanks for Reading"
 Menu-Title: "&bGames Selector"
-Fly-Message-Enable: '&a[Success] &7{player} Fly Mode Enable Now .Enjoy to your fly'
-Fly-Message-Disable: '&c[Error] &7{player} Fly Mode Disabled.You can''t fly anymore.'
-Death-Message: "&a{Player} &dWas Death &b{HowDeath}"
+Fly-Message-Enable: '&a[Success] &7%flixcore_player_name% Fly Mode Enable Now .Enjoy to your fly'
+Fly-Message-Disable: '&c[Error] &7%flixcore_player_name% Fly Mode Disabled.You can''t fly anymore.'
+Death-Message: "&a%flixcore_player_name% &dWas Death &b{HowDeath}"
 Block-Place: true
-Block-Place-Message: '&6[Block-Place] {Player} &eYou Can''t Build &d{BuidlBlock} &ePlease Not try again'
-Join-Message: '&7[+1] &a{Player} &dWelcome to Lobby'
-Disconnected-Message: '&c[Disconnected] &a{Player} has been Disconnected The {Reason}'
-Leave-Message: "&7[-1] &a{Player} Leave From Server"
+Block-Place-Message: '&6[Block-Place] %flixcore_player_name% &eYou Can''t Build &d{buildblock} &ePlease Not try again'
+Join-Message: '&7[+1] &a%flixcore_player_name% &dWelcome to Lobby'
+Disconnected-Message: '&c[Disconnected] &a%flixcore_player_name% has been Disconnected The {Reason}'
+Leave-Message: "&7[-1] &a%flixcore_player_name% Leave From Server"
+Broadcast-prefix: "&d[Broadcast]"
+
+# Invalid-number for clear chat
+Invalid-number: '&cPlease Enter a Valid Number'
+Chat-cleared-message: "&dChat Has Been Cleared By &a%flixcore_player_name%"
+Rules-Server:
+  - "&7----- Server Rules -----"
+  - "&61. &7Be Respectful to others"
+  - "&62. &7No Spamming or Advertising"
+  - "&63. &7Use Appropriate Language"
+  - "&64. &7No Griefing or Stealing"
+  - "&65. &7Follow Staff Instructions"
+  - "&66. &7No Hacking or Exploiting"
+  - "&67. &7Keep Chat Friendly and Inclusive"
+  - "&68. &7Report Issues to Staff"
+  - "&69. &7Have Fun and Enjoy Your Time!"
+  - "&7---------------------"
 ## My Age is

@@ -3,6 +3,7 @@ package com.abbas.FlixCore.MainListeners;
 import com.abbas.FlixCore.FlixCore;
 import com.abbas.FlixCore.Utiles.BowUtils;
 import com.abbas.FlixCore.Utiles.ColorUtils;
+import com.abbas.FlixCore.Utiles.PAPIUTILS;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -17,27 +18,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.UUID;
 
 import static com.comphenix.protocol.PacketType.Play.Server.SPAWN_ENTITY_LIVING;
+import static org.bukkit.GameMode.ADVENTURE;
 
 @Getter
 public class EventListener implements Listener {
     private final FlixCore instance;
     private final HashSet<UUID> givePlayer = new HashSet<>();
     private final ProtocolManager protocolManager;
+
     public EventListener() {
         this.instance = FlixCore.getInstance();
         this.protocolManager = ProtocolLibrary.getProtocolManager();
@@ -55,51 +53,65 @@ public class EventListener implements Listener {
     public void PlayerJ(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         event.setJoinMessage(null);
-        String joinMessage = FlixCore.getInstance().getMessagesConfig().getString("Join-Message");
+        String joinMessage = instance.getMessagesConfig().getString("Join-Message");
         if (joinMessage != null && !joinMessage.isEmpty()) {
-            player.sendMessage(ColorUtils.colorize(joinMessage.replace("{Player}", player.getName())));
+            String formattedMessage = formatMessage(player, joinMessage);
+            Bukkit.broadcastMessage(formattedMessage);
         }
         boolean hasBow = false;
         String teleportBowName = FlixCore.getInstance().getTeleportBow().getString("name-bow", "");
-        for (ItemStack item : player.getInventory().getContents()) {if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {if (item.getItemMeta().getDisplayName().contains(ColorUtils.colorize(teleportBowName))) {hasBow = true;break;}}}
-        if (!hasBow) {ItemStack teleportBow = BowUtils.CreateTeleportBow(FlixCore.getInstance());player.getInventory().addItem(teleportBow);player.getInventory().addItem(new ItemStack(Material.ARROW, 1));}
+        for (ItemStack item : player.getInventory().getContents()) {
+            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+                if (item.getItemMeta().getDisplayName().contains(ColorUtils.colorize(teleportBowName))) {
+                    hasBow = true;
+                    break;}}}
+        if (!hasBow) {
+            ItemStack teleportBow = BowUtils.CreateTeleportBow(FlixCore.getInstance());player.getInventory().addItem(teleportBow);player.getInventory().addItem(new ItemStack(Material.ARROW, 1));}
         player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0f, 1.0f);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1, true, true));
+        player.setGameMode(ADVENTURE);
+        if (instance.getTabListener() != null) {
+            instance.getTabListener().sendTo(player);
+        }
     }
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
         event.setLeaveMessage(null);
         Player player = event.getPlayer();
-        //Can you now Change Message From Config
-        //Add Bow if player join first time for server
-        String disconnectedMessage =  instance.getMessagesConfig().getString("Disconnected-Message");
+        String disconnectedMessage = instance.getMessagesConfig().getString("Disconnected-Message");
         if (disconnectedMessage != null && !disconnectedMessage.isEmpty()) {
-            String message =  disconnectedMessage
-                    .replace("{Player}", player.getName())
-                    .replace("{Reason}", event.getReason());
-            player.sendMessage(ColorUtils.colorize(message));
+            String message = disconnectedMessage.replace("{Reason}", event.getReason());
+            String formattedMessage = formatMessage(player, message);
+            Bukkit.broadcastMessage(formattedMessage);
         }
     }
 
     @EventHandler
-    public void LeaveBed(PlayerBedLeaveEvent event) {
-        Player player = event.getPlayer();
-        player.sendMessage(ColorUtils.colorize( "&e&l[important] You Leave Bed ") + player.getName() + "!");
-        player.damage(2.0);
-        Location loc = player.getLocation();
-        player.playSound(loc , Sound.BAT_TAKEOFF, 1.0f, 1.0f);
-    }
-    @EventHandler
-    public void LeaveS(PlayerQuitEvent event) {
+    public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         event.setQuitMessage(null);
+
         String leaveMessage = instance.getMessagesConfig().getString("Leave-Message");
         if (leaveMessage != null && !leaveMessage.isEmpty()) {
-            String leavem = leaveMessage
-                    .replace("{Player}", player.getName());
-            player.sendMessage(ColorUtils.colorize(leavem));
-            Location loc = player.getLocation();
-            player.playSound(loc , Sound.VILLAGER_NO, 1.0f,1.0f);
+            String formattedMessage = formatMessage(player, leaveMessage);
+            Bukkit.broadcastMessage(formattedMessage);
+        }
+
+        player.getWorld().playSound(player.getLocation(), Sound.VILLAGER_NO, 1.0f, 1.0f);
+    }
+    @EventHandler
+    public void onBedLeave(PlayerBedLeaveEvent event) {
+        Player player = event.getPlayer();
+        String message = formatMessage(player, "&e&l[Important] You left the bed!");
+        player.sendMessage(message);
+        player.damage(2.0);
+        player.playSound(player.getLocation(), Sound.BAT_TAKEOFF, 1.0f, 1.0f);
+    }
+    @EventHandler
+    public void onFoodLevelChange(FoodLevelChangeEvent event) {
+        if (event.getEntity() instanceof Player) {
+            event.setFoodLevel(20);
+            event.setCancelled(true);
         }
     }
     @EventHandler
@@ -108,160 +120,152 @@ public class EventListener implements Listener {
         if (!player.isOp()) {
             String configMessage = instance.getMessagesConfig().getString("Block-Break-Message");
             if (configMessage != null && !configMessage.isEmpty()) {
-                String message = configMessage
-                        .replace("{Player}", player.getName())
-                        .replace("{Block}", event.getBlock().getType().toString());
-                player.sendMessage(ColorUtils.colorize(message));
+                String message = configMessage.replace("{Block}",
+                        event.getBlock().getType().toString());
+                String formattedMessage = formatMessage(player, message);
+                player.sendMessage(formattedMessage);
             }
-            player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1.0f, 1.0f);
-            event.setCancelled(true);
-        } else {
-            event.setCancelled(false);
+            player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1.0f, 1.0f);event.setCancelled(true);
         }
     }
+
     @EventHandler
-    public void EXP(ExpBottleEvent event) {
+    public void onExpBottle(ExpBottleEvent event) {
         event.setExperience(0);
-        //Default Effect Remove
         event.setShowEffect(false);
-        //PlayEffect
         event.getEntity().getWorld().playEffect(event.getEntity().getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
-        //PlaySound
-        event.getEntity().getWorld().playSound(
-                event.getEntity().getLocation(),
-                Sound.BAT_HURT,
-                1.0f,
-                1.0f
-        );
+        event.getEntity().getWorld().playSound(event.getEntity().getLocation(), Sound.BAT_HURT, 1.0f, 1.0f);
     }
     @EventHandler
-    public void ShearSheep(PlayerShearEntityEvent event) {
+    public void onShearSheep(PlayerShearEntityEvent event) {
         Player player = event.getPlayer();
         Entity entity = event.getEntity();
         if (entity.getType() == EntityType.SHEEP) {
             event.setCancelled(true);
-            player.sendMessage(ColorUtils.colorize( "&c[Error] You Can't Shear Sheep Now!"));
-
+            String message = formatMessage(player, "&c[Error] You can't shear sheep right now!");
+            player.sendMessage(message);
         } else {
-            player.sendMessage(ColorUtils.colorize( "&a[Success] You Shear " + entity.getType() + "!"));
+            String message = formatMessage(player, "&a[Success] You sheared " + entity.getType() + "!");
+            player.sendMessage(message);
         }
     }
-    /**
-     * @deprecated Use #Chat(PlayerChatEvent) instead
-     *
-     */
     @EventHandler
-    public void Chat(PlayerChatEvent event) {
+    public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String configMessage = instance.getMessagesConfig().getString("Chat-Format");
         if (configMessage != null && !configMessage.isEmpty()) {
-            String message = configMessage.replace("{Player}", player.getName()).
-                    replace("{Message}", event.getMessage());event.setFormat(ColorUtils.colorize(message));
+            String message = configMessage.replace("{Message}", event.getMessage());
+            String formattedMessage = formatMessage(player, message);
+            event.setFormat(formattedMessage);
         }
-        event.setCancelled(false);
     }
+
     @EventHandler
     public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         String cmd = event.getMessage().toLowerCase();
         String commandError = instance.getMessagesConfig().getString("Error-Commands");
-        if (commandError == null || commandError.isEmpty()) {return;}
-        String message = ColorUtils.colorize(commandError.replace("{Player}", player.getName()));
-        String[] BlockedCommands = {
-                "/op", "/?", "/pl", "/plugins",
-                "/bukkit:pl", "/bukkit:plugins", "/bukkit:ver", "/bukkit:version",
-                "/bukkit:about", "/ver", "/version", "/about"};
-        for (String blockedCmd : BlockedCommands) {
+        if (commandError == null || commandError.isEmpty()) {
+            return;
+        }
+        String[] blockedCommands = {
+                "/op", "/?", "/pl", "/plugins", "/instances", "/bukkit:pl",
+                "/bukkit:plugins", "/bukkit:instances", "/bukkit:ver",
+                "/bukkit:version", "/bukkit:about", "/ver", "/version", "/about"};
+        for (String blockedCmd : blockedCommands) {
             if (cmd.startsWith(blockedCmd)) {
                 if (player.hasPermission("Plugin.bypass")) {return;}
                 event.setCancelled(true);
-                player.sendMessage(message);
+                String formattedMessage = formatMessage(player, commandError);
+                player.sendMessage(formattedMessage);
                 break;
             }
         }
     }
     @EventHandler
-    public void PlayerAchievement(PlayerAchievementAwardedEvent event) {
+    public void onPlayerAchievement(PlayerAchievementAwardedEvent event) {
         event.setCancelled(true);
     }
     @EventHandler
-    public void DamageEvent(EntityDamageEvent event) {
-        boolean DamageEvent = instance.getMessagesConfig().getBoolean("Damage-Event", true);
-        if (DamageEvent) {
+    public void onEntityDamage(EntityDamageEvent event) {
+        boolean damageDisabled = instance.getMessagesConfig().getBoolean("Damage-Event", true);
+        if (damageDisabled) {
             event.setCancelled(true);
         }
     }
     @EventHandler
-    public void DropIE(PlayerDropItemEvent event) {
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
         event.setCancelled(true);
         Player player = event.getPlayer();
-
-        String DropIM = instance.getMessagesConfig().getString("Drop-Item");
-        if (DropIM != null && !DropIM.isEmpty()) {
-            String message = DropIM.replace("{Player}", player.getName())
-                    .replace("{Item}", event.getItemDrop().getItemStack().getType().name());
-            player.sendMessage(ColorUtils.colorize(message));
+        String dropMessage = instance.getMessagesConfig().getString("Drop-Item");
+        if (dropMessage != null && !dropMessage.isEmpty()) {
+            String message = dropMessage.replace("{Item}", event.getItemDrop().getItemStack().getType().name());
+            String formattedMessage = formatMessage(player, message);
+            player.sendMessage(formattedMessage);
         }
     }
     @EventHandler
-    public void BedEnter(PlayerBedEnterEvent event) {
+    public void onBedEnter(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
         event.setCancelled(true);
-        String BedEnter = instance.getMessagesConfig().getString("Bed-Enter");
-        if (BedEnter != null && !BedEnter.isEmpty()) {
-            String BedEnterMessage = BedEnter.replace("{Player}", player.getName());
-            player.sendMessage(ColorUtils.colorize(BedEnterMessage));
+        String bedEnter = instance.getMessagesConfig().getString("Bed-Enter");
+        if (bedEnter != null && !bedEnter.isEmpty()) {
+            String formattedMessage = formatMessage(player, bedEnter);
+            player.sendMessage(formattedMessage);
         }
     }
     @EventHandler
-    public void EventMenu(InventoryClickEvent event) {
-        if (event.getView().getTitle().equals("Menu")) {
-            event.setCancelled(true);
-            if (event.isRightClick()) return;
-            Player player = (Player) event.getWhoClicked();
-            ItemStack clicked = event.getCurrentItem();
-            if (clicked == null || clicked.getType() == Material.AIR) return;
-            if (Objects.requireNonNull(clicked.getType()) == Material.BED) {
-                CnctSM(player, "BedWars");
-                player.closeInventory();
-            }
-        }
-    }
-    private void CnctSM(Player player, String servername) {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-        try {
-            out.writeUTF("Connect");
-            out.writeUTF(servername);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        player.sendPluginMessage(FlixCore.getPlugin(FlixCore.class), "BungeeCord", b.toByteArray());
-    }
-    @EventHandler
-    public void ChangeWorldEvent(PlayerChangedWorldEvent event) {
+    public void onWorldChange(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
-        Location location = player.getLocation();
-        player.getWorld().playSound(location, Sound.LAVA_POP, 1.0f,1.0f);
+        player.getWorld().playSound(player.getLocation(), Sound.LAVA_POP, 1.0f, 1.0f);
     }
     @EventHandler
-    public void DeathPlayerEvent(PlayerDeathEvent event) {
+    public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         event.setDeathMessage(null);
-        String DeathMessage = instance.getMessagesConfig().getString("Death-Message");
-        if (DeathMessage != null) {
-           String sendMessage = DeathMessage
-                    .replace("{player}", player.getName())
-                    .replace("{HowDeath}", player.getLastDamageCause().getCause().toString());
-            player.sendMessage(ColorUtils.colorize(sendMessage));
+
+        String deathMessage = instance.getMessagesConfig().getString("Death-Message");
+        if (deathMessage != null) {
+            String cause = player.getLastDamageCause() != null ? player.getLastDamageCause().getCause().toString() : "UNKNOWN";
+            String message = deathMessage.replace("{HowDeath}", cause);
+            String formattedMessage = formatMessage(player, message);
+            Bukkit.broadcastMessage(formattedMessage);
         }
     }
     @EventHandler
-    public void onMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        if (player.hasPermission("spawn.Entity")) {
-            Entity entity = player.getWorld().spawnEntity(player.getLocation(), EntityType.COW);
-            entity.setCustomName(ColorUtils.colorize("&d&lMy CCOWW"));
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (isSpawnConfigured()) {
+            World world = Bukkit.getWorld(instance.getSpawnLoc().getString("spawn.world"));
+            double x = instance.getSpawnLoc().getDouble("spawn.x");
+            double y = instance.getSpawnLoc().getDouble("spawn.y");
+            double z = instance.getSpawnLoc().getDouble("spawn.z");
+            float yaw = (float) instance.getSpawnLoc().getDouble("spawn.yaw");
+            float pitch = (float) instance.getSpawnLoc().getDouble("spawn.pitch");
+            if (world != null) {
+                Location spawnLocation = new Location(world, x, y, z, yaw, pitch);
+                event.setRespawnLocation(spawnLocation);
+            } else {
+                String message = formatMessage(event.getPlayer(), "&c[Error] Spawn world not found!");
+                event.getPlayer().sendMessage(message);
+            }
+        } else {
+            String message = formatMessage(event.getPlayer(), "&c[Error] Spawn is not set! Please contact an admin.");
+            event.getPlayer().sendMessage(message);
         }
+    }
+    private String formatMessage(Player player, String message) {
+        if (message == null || message.isEmpty()) return "";
+        message = message.replace("{player}", player.getName());
+        message = PAPIUTILS.apply(player, message);
+        message = ColorUtils.colorize(message);
+        return message;
+    }
+    private boolean isSpawnConfigured() {
+        return instance.getSpawnLoc().getString("spawn.world") != null &&
+                instance.getSpawnLoc().contains("spawn.x") &&
+                instance.getSpawnLoc().contains("spawn.y") &&
+                instance.getSpawnLoc().contains("spawn.z") &&
+                instance.getSpawnLoc().contains("spawn.yaw") &&
+                instance.getSpawnLoc().contains("spawn.pitch");
     }
 }

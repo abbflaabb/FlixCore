@@ -3,6 +3,7 @@ package dev.abbas.FlixCore.Scoreboards;
 
 import com.abbas.FlixCore.FlixCore;
 import com.abbas.FlixCore.Utiles.ColorUtils;
+import com.abbas.FlixCore.Utiles.PAPIUTILS;
 import e.com.abbas.LuckPermsAPI.Perms;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,8 +25,6 @@ public class ScoreboardManager {
         this.instance = instance;
         this.perm = new Perms();
     }
-
-
     public void Updater() {
         new BukkitRunnable() {
             @Override
@@ -40,26 +39,24 @@ public class ScoreboardManager {
         Scoreboard bsc = Bukkit.getScoreboardManager().getNewScoreboard();
         String title = instance.getScoreboard() != null ? instance.getScoreboard().getString("scoreboard.title") : null;
         if (title == null) title = "&aServer Info";
+
         Objective objective = bsc.registerNewObjective("server", "dummy");
         objective.setDisplayName(ColorUtils.colorize(title));
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
         List<String> lines = instance.getScoreboard() != null ? instance.getScoreboard().getStringList("scoreboard.lines") : null;
         if (lines == null) return;
         int score = lines.size();
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             if (line == null) continue;
-            String formatted = line
-                    .replace("{player}", player.getName())
-                    .replace("{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                    .replace("{rank}", perm.getPlayerRank(player));
-            String colorized = ColorUtils.colorize(formatted);
-            if (stripColorCodes(colorized).length() <= 16) {
-                objective.getScore(colorized).setScore(score--);
+            String formatted = formatMessage(player, line);
+            if (stripColorCodes(formatted).length() <= 16) {
+                objective.getScore(formatted).setScore(score--);
                 continue;
             }
-            String prefix = colorized.substring(0, Math.min(16, colorized.length()));
-            String suffix = colorized.length() > 16 ? colorized.substring(16, Math.min(32, colorized.length())) : "";
+            String prefix = formatted.substring(0, Math.min(16, formatted.length()));
+            String suffix = formatted.length() > 16 ? formatted.substring(16, Math.min(32, formatted.length())) : "";
             String teamName = "line" + i;
             Team team = bsc.registerNewTeam(teamName);
             team.setPrefix(prefix);
@@ -69,8 +66,17 @@ public class ScoreboardManager {
             objective.getScore(entry).setScore(score--);
         }
         player.setScoreboard(bsc);
-    }private String stripColorCodes(String input) {
+    }
+    private String stripColorCodes(String input) {
         if (input == null) return "";
         return input.replaceAll("(?i)(&[0-9A-FK-OR])|(§[0-9A-FK-OR])", "");
+    }
+
+    private String formatMessage(Player player, String message) {
+        if (message == null || message.isEmpty()) return "";
+        message = message.replace("{player}", player.getName());
+        message = PAPIUTILS.apply(player, message);
+        message = ColorUtils.colorize(message);
+        return message;
     }
 }

@@ -16,22 +16,15 @@ public class SpawnCommand implements APICommands {
     @Override
     public boolean CMD(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(ColorUtils.colorize("&c[Error],You Dont Have Perms"));
-            return true;
-        }
+            sender.sendMessage(ColorUtils.colorize("&c[Error],You Dont Have Perms"));return true;}
         Location Loc = getSpawnLocation();
-        if (Loc == null) {
-            player.sendMessage(ColorUtils.colorize("&a[Error],Spawn Dont Set Please Talk for admin for setspawn"));
-            return true;
-        }
+        if (Loc == null) {player.sendMessage(ColorUtils.colorize("&a[Error],Spawn Dont Set Please Talk for admin for setspawn"));return true;}
         player.teleport(Loc);
         player.sendMessage(ColorUtils.colorize("&a[Success]Teleported to spawn"));
         return true;
     }
     private Location getSpawnLocation() {
-        if (!instance.getSpawnLoc().contains("spawn.world")) {
-            return null;
-        }
+        if (!instance.getSpawnLoc().contains("spawn.world")) {return null;}
         String worldName = instance.getSpawnLoc().getString("spawn.world");
         double x = instance.getSpawnLoc().getDouble("spawn.x");
         double y = instance.getSpawnLoc().getDouble("spawn.y");

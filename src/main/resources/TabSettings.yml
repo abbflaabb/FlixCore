@@ -1,0 +1,11 @@
+Tab-Settings:
+  Update-Delay: 40
+  holders: true
+header-frames:
+  - "&a&lWelcome to &b&lFlix&f&lCore!"
+  - "&b&lEnjoy your time &7| &a%flixcore_player_name%"
+
+footer-frames:
+  - "&7━━━━━━━━━━━━━━━━━━━━━"
+  - "&7Online: &a%flixcore_server_online% &7| TPS: &a%flixcore_server_tps%"
+  - "&7━━━━━━━━━━━━━━━━━━━━━"
