@@ -1,0 +1,48 @@
+version: "1.4"
+release_date: "2025-10-16"
+
+changes:
+  new_features:
+    - "Added BroadCastManager"
+    - "Added CommandBroadCast"
+    - "Added ClearChat Command"
+    - "Added JumpPad (works on any Slime block)"
+    - "Added Ping Command"
+    - "Added RankCommand and RulesCommand"
+    - "Added ScoreBoardChangeWorld"
+    - "Added TabListener"
+
+  api_and_utils:
+    - "Added MainPlaceholders"
+    - "Added PAPIUTILS"
+    - "Added PlaceHolders system"
+
+  command_updates:
+    - "Optimized and cleaned up existing commands"
+    - "Improved performance and consistency"
+
+placeholders:
+  - "%flixcore_server_online%"
+  - "%flixcore_server_max%"
+  - "%flixcore_server_tps%"
+  - "%flixcore_server_name%"
+  - "%flixcore_server_version%"
+  - "%flixcore_time%"
+  - "%flixcore_date%"
+  - "%flixcore_player_name%"
+  - "%flixcore_player_level%"
+  - "%flixcore_player_exp%"
+  - "%flixcore_player_max_health%"
+  - "%flixcore_player_health%"
+  - "%flixcore_player_food%"
+  - "%flixcore_player_ping%"
+  - "%flixcore_player_world%"
+  - "%flixcore_player_rank%"
+  - "%flixcore_server_online_formatted%"
+
+notes: |
+  FlixCore v1.4 brings smoother performance, new utilities,
+  and a cleaner, more optimized core system.
+
+developer: "Abbas"
+project: "FlixCore"
