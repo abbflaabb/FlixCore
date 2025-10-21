@@ -11,12 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class GiveCommand implements APICommands {
-    private final FlixCore instance;
-
-    public GiveCommand(FlixCore instance) {
-        this.instance = instance;
-    }
+public record GiveCommand(FlixCore instance) implements APICommands {
 
 
     @Override
@@ -28,7 +23,7 @@ public class GiveCommand implements APICommands {
                     player.getInventory().addItem(bow);
                     player.getInventory().addItem(new ItemStack(Material.ARROW, 1));
                     player.sendMessage(ColorUtils.colorize("&d&lGive To You Bow"));
-                }else {
+                } else {
                     Player target = Bukkit.getPlayerExact(args[0]);
 
                     if (target == null) {

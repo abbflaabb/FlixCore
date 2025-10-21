@@ -4,10 +4,6 @@ import com.abbas.FlixCore.FlixCore;
 import com.abbas.FlixCore.Utiles.BowUtils;
 import com.abbas.FlixCore.Utiles.ColorUtils;
 import com.abbas.FlixCore.Utiles.PAPIUTILS;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
 import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -27,27 +23,15 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashSet;
 import java.util.UUID;
 
-import static com.comphenix.protocol.PacketType.Play.Server.SPAWN_ENTITY_LIVING;
 import static org.bukkit.GameMode.ADVENTURE;
 
 @Getter
 public class EventListener implements Listener {
     private final FlixCore instance;
     private final HashSet<UUID> givePlayer = new HashSet<>();
-    private final ProtocolManager protocolManager;
 
     public EventListener() {
         this.instance = FlixCore.getInstance();
-        this.protocolManager = ProtocolLibrary.getProtocolManager();
-        protocolManager.addPacketListener(new PacketAdapter(instance, SPAWN_ENTITY_LIVING) {
-            @Override
-            public void onPacketSending(PacketEvent event) {
-                Player receiver = event.getPlayer();
-                if (!receiver.hasPermission("spawn.Entity")) {
-                    event.setCancelled(true);
-                }
-            }
-        });
     }
     @EventHandler
     public void PlayerJ(PlayerJoinEvent event) {

@@ -14,6 +14,7 @@ import dev.abbas.FlixCore.Scoreboards.ScoreBoardChangeWorld;
 import dev.abbas.FlixCore.Scoreboards.ScoreboardListener;
 import dev.abbas.FlixCore.Scoreboards.ScoreboardManager;
 import lombok.Getter;
+import ma.abbas.FlixCore.SetSpawn.PlayerJoin;
 import ma.abbas.FlixCore.SetSpawn.SetSpawnCommand;
 import ma.abbas.FlixCore.SetSpawn.SpawnCommand;
 import me.abbas.FlixCore.tab.TabListener;
@@ -52,7 +53,6 @@ public final class FlixCore extends JavaPlugin {
     private TabListener tabListener;
     BukkitTask tabtask;
     private BroadCastManager broadcastManager;
-
     @Override
     public void onEnable() {
         instance = this;
@@ -117,6 +117,7 @@ public final class FlixCore extends JavaPlugin {
         } else {
             getLogger().severe("❌ TabSettings or ProtocolLib missing — TabList disabled!");
         }
+
     }
 
     @Override
@@ -143,6 +144,7 @@ public final class FlixCore extends JavaPlugin {
         pluginManager.registerEvents(new ScoreBoardChangeWorld(instance), this);
         pluginManager.registerEvents(new JumpPadListener(), instance);
         pluginManager.registerEvents(new JumpPadModifierListener(), instance);
+        pluginManager.registerEvents(new PlayerJoin(instance), instance);
     }
     private void registerCommandsWithAPI() {
         SupportCommand supportCommand = new SupportCommand(instance);

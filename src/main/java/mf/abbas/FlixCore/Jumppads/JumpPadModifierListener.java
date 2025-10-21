@@ -9,9 +9,9 @@ public class JumpPadModifierListener implements Listener {
     @EventHandler
     public void onjump(JumpPadEvent event) {
         if (event.getPlayer().hasPermission("Flixcore.JumpMode")) {
-            Vector booster =  event.getVelocity().multiply(1.5);
-            event.setVelocity(booster);
-            event.getPlayer().sendMessage(ColorUtils.colorize("§bVIP Jump Boost!"));
+            Vector boost = event.getVelocity().multiply(1.4);
+            boost.setY(boost.getY() * 1.2);
+            event.setVelocity(boost);
         }
         if (!event.getPlayer().hasPermission("Flixcore.JumpMode")) {
             event.setCancelled(true);

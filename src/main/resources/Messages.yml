@@ -64,4 +64,7 @@ Rules-Server:
   - "&68. &7Report Issues to Staff"
   - "&69. &7Have Fun and Enjoy Your Time!"
   - "&7---------------------"
+Settings:
+  Teleport-On-Join: true
+
 ## My Age is

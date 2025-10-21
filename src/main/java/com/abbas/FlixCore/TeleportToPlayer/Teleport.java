@@ -3,7 +3,6 @@ package com.abbas.FlixCore.TeleportToPlayer;
 import com.abbas.FlixCore.Utiles.ColorUtils;
 import com.abbas.FlixCore.api.APICommands;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,8 +14,7 @@ public class Teleport implements APICommands {
             sender.sendMessage(ColorUtils.colorize("&cYou Not Allowed Use This Command"));
             return true;
         }
-        if (sender instanceof Player) {
-            Player p = (Player) sender;
+        if (sender instanceof Player p) {
             //like this tp M7wq ==  mahmoud <3
             if (args.length == 0) {
                 p.sendMessage(ColorUtils.colorize("&c&lYou Need To Enter Some argument"));
