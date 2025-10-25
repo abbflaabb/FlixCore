@@ -1,22 +1,24 @@
 package com.abbas.FlixCore;
 
 import com.abbas.FlixCore.MainCommands.*;
+import com.abbas.FlixCore.MainCommands.StaffChat.StaffChatCommand;
+import com.abbas.FlixCore.MainListeners.ChatLockListener;
 import com.abbas.FlixCore.MainListeners.EventListener;
 import com.abbas.FlixCore.MainListeners.PlaceEvent;
+import com.abbas.FlixCore.MainListeners.StaffChatListener;
 import com.abbas.FlixCore.TeleportBow.GiveCommand;
 import com.abbas.FlixCore.TeleportBow.TeleportListener;
 import com.abbas.FlixCore.TeleportToPlayer.Teleport;
 import com.abbas.FlixCore.TeleportToPlayer.TeleportAllForYou;
 import com.abbas.FlixCore.Utiles.PAPIUTILS;
+import com.abbas.FlixCore.api.StaffChat;
+import com.abbas.FlixCore.manager.StaffChatManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import dev.abbas.FlixCore.Scoreboards.ScoreBoardChangeWorld;
 import dev.abbas.FlixCore.Scoreboards.ScoreboardListener;
 import dev.abbas.FlixCore.Scoreboards.ScoreboardManager;
 import lombok.Getter;
-import ma.abbas.FlixCore.SetSpawn.PlayerJoin;
-import ma.abbas.FlixCore.SetSpawn.SetSpawnCommand;
-import ma.abbas.FlixCore.SetSpawn.SpawnCommand;
 import me.abbas.FlixCore.tab.TabListener;
 import me.abbas.FlixCore.tab.placeholdermain.MainPlaceholders;
 import mf.abbas.FlixCore.Jumppads.JumpPadListener;
@@ -36,6 +38,8 @@ import v.com.abbas.Vanish.VanishCommand;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.UUID;
 
 @Getter
 public final class FlixCore extends JavaPlugin {
@@ -53,9 +57,13 @@ public final class FlixCore extends JavaPlugin {
     private TabListener tabListener;
     BukkitTask tabtask;
     private BroadCastManager broadcastManager;
+    private StaffChatManager staffChatManager;
+    private Map<UUID, StaffChat > staffChat;
     @Override
     public void onEnable() {
         instance = this;
+        staffChatManager = new StaffChatManager();
+
         luckPerms = LuckPermsProvider.get();
         saveResource("Messages.yml", false);
         saveResource("TeleportBow.yml", false);
@@ -82,7 +90,6 @@ public final class FlixCore extends JavaPlugin {
         this.scoreboardManager = new ScoreboardManager(this);
         this.scoreboardManager.Updater();
         this.broadcastManager = new BroadCastManager(this);
-
         getServer().getPluginManager().registerEvents(
                 new ScoreboardListener(scoreboardManager), this
         );
@@ -144,7 +151,8 @@ public final class FlixCore extends JavaPlugin {
         pluginManager.registerEvents(new ScoreBoardChangeWorld(instance), this);
         pluginManager.registerEvents(new JumpPadListener(), instance);
         pluginManager.registerEvents(new JumpPadModifierListener(), instance);
-        pluginManager.registerEvents(new PlayerJoin(instance), instance);
+        pluginManager.registerEvents(new StaffChatListener(instance), instance);
+        pluginManager.registerEvents(new ChatLockListener(), instance);
     }
     private void registerCommandsWithAPI() {
         SupportCommand supportCommand = new SupportCommand(instance);
@@ -156,12 +164,6 @@ public final class FlixCore extends JavaPlugin {
         GiveCommand giveCommand =  new GiveCommand(instance);
         CommandBroadCast commandBroadCast = new CommandBroadCast(instance);
         getCommand("broadcast").setExecutor(commandBroadCast::CMD);
-        //SpawnCommands;
-        SetSpawnCommand setSpawnCommand = new SetSpawnCommand(instance);
-        SpawnCommand spawnCommand = new SpawnCommand(instance);
-        getCommand("SetSpawn").setExecutor(setSpawnCommand::CMD);
-        getCommand("Spawn").setExecutor(spawnCommand::CMD);
-
 
 
         getCommand("support").setExecutor(supportCommand::CMD);
@@ -176,6 +178,13 @@ public final class FlixCore extends JavaPlugin {
         getCommand("Ping").setExecutor(pingCommand::CMD);
         RulesCommand rules = new RulesCommand(instance);
         getCommand("Rules").setExecutor(rules::CMD);
+
+        ToggleChatLock lock = new ToggleChatLock(instance);
+        getCommand("LockChat").setExecutor(lock::CMD);
+        MsgCommand msgCommand = new MsgCommand(instance);
+        getCommand("Msg").setExecutor(msgCommand::CMD);
+        StaffChatCommand staffChatCommand = new StaffChatCommand(instance);
+        getCommand("StaffChat").setExecutor(staffChatCommand::CMD);
     }
     public void loadMessagesConfig() {
         File messagesFile = new File(getDataFolder(), "Messages.yml");

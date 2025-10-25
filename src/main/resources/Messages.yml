@@ -25,11 +25,14 @@ Help-Command:
   - "&6/about &7-For see About Server (Just Admins)"
   - "&6/tp &7- For Tp to any player (Just Admins)"
   - "&6/tpall &7- For Tp all players to u (Just Admins)"
-  - "&6/setspawn &7- Set Spawn Point (Just Admins)"
-  - "&6/spawn &7- Teleport to Spawn Point"
   - "&6/clearchat &7- Clear The Chat (Just Admins)"
   - "&6/ping &7- Show Your Ping"
   - "&6/broadcast &7- Send Message to All Players (Just Admins)"
+  - "&6/ClearChat &7- For ClearChat (Just Admins)"
+  - "&6/Rules &7- For show server Rules "
+  - "&6/Msg &7- to send you to another player"
+  - "&6/StaffChat &7- StaffChat for(Just Admins)"
+  - "&6/LockChat &7- LockChat for(Just Admins)"
   - "&7---------------------"
 cooldown-message: '&cPlease wait {time} for use Command this again'
 Messages-not-loaded: '&cConfig not loaded'
@@ -38,7 +41,6 @@ Support-links:
   - "&7DiscordLink: &eDiscord.Com"
   - "&7Website: &ewww.Test.GGe.hh2"
   - "&7Thanks for Reading"
-Menu-Title: "&bGames Selector"
 Fly-Message-Enable: '&a[Success] &7%flixcore_player_name% Fly Mode Enable Now .Enjoy to your fly'
 Fly-Message-Disable: '&c[Error] &7%flixcore_player_name% Fly Mode Disabled.You can''t fly anymore.'
 Death-Message: "&a%flixcore_player_name% &dWas Death &b{HowDeath}"
@@ -66,5 +68,5 @@ Rules-Server:
   - "&7---------------------"
 Settings:
   Teleport-On-Join: true
-
+PlayerNotFound: "&c&l[Error] this player not found in server please try latter "
 ## My Age is

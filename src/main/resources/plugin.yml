@@ -52,17 +52,6 @@ commands:
   TpAll:
     description: For Tp all players to u
     usage: /<command>
-  SetSpawn:
-    description: SetSpawnCommand
-    usage: /<command>
-  Spawn:
-    description: SpawnCommand
-    usage: /<command>
-    aliases:
-      - lobby
-      - hub
-      - l
-      - h
   Rank:
     description: For RankPlayer
     usage: /<command>
@@ -91,6 +80,19 @@ commands:
       - rls
       - rule
       - rl
+  Msg:
+    description: for Send message to another player in lobby
+    usage: /<command>
+  StaffChat:
+    description: Toggle staff chat or send a staff message
+    usage: /<command> [toggle|message]
+    aliases: [ sc, ac, adminchat ]
+  LockChat:
+    description: togglelockchat
+    usage: /<command>
+    aliases:
+      - lc
+      - lct
 permissions:
   Plugin.bypass:
     description: Allows access to Events
@@ -128,3 +130,27 @@ permissions:
   Flixcore.Rank:
     description: For See Your Rank
     default: true
+  FlixCore.Msg:
+    description: For Send Message to another player
+    default: op
+  FlixCore.StaffChat:
+    description: Basic staff chat access
+    default: op
+
+  FlixCore.StaffChat.OWNER:
+    description: Owner staff chat
+    default: op
+
+  FlixCore.StaffChat.Manager:
+    description: Manager staff chat
+    default: op
+
+  FlixCore.StaffChat.Admin:
+    description: Admin staff chat
+    default: op
+  FlixCore.StaffChat.Admin-JR:
+    description: AdminJr staffChat
+    default: op
+  FlixCore.StaffChat.STAFF:
+    description: Staff Chat default
+    default: op
